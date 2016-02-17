@@ -51,7 +51,7 @@ void pack::PackFolder(LPCTSTR szFolderPath, TiXmlElement* parent_node)
     TiXmlElement node("Folder");
     node.SetAttribute("Name", GetFolderName(buff));
     delete[] buff;
-	//这里通过使用TinyXML库生成一个索引文件来帮助解包器进行文件定位
+    //以上通过使用TinyXML库生成一个索引文件来帮助解包器进行文件定位
  
     // 定义变量len记录长度
     long len = 0;
