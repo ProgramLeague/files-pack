@@ -1,5 +1,5 @@
 #pragma once
-#include "work.h"
+#include "pack.h"
 
 pack::pack(TCHAR dir_out[], TCHAR dir_index[], TCHAR dir_in[])
 {
