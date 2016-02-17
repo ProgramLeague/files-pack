@@ -1,8 +1,13 @@
 #pragma once
 #include "work.h"
 
-pack::pack(TCHAR dir_out[MAX_PATH], TCHAR dir_index[MAX_PATH], TCHAR dir_in[MAX_PATH])
+pack::pack(TCHAR dir_out[], TCHAR dir_index[], TCHAR dir_in[])
 {
+    /*
+    *    step1:    结构化文件索引
+    *    step2:    保存资源并写入包（同时加密）
+    *    step3:    保存索引文件
+    */
 	if(_wfopen_s(&fpOut, dir_out, _T("wb+"))==0)
 	{
 		TiXmlDocument xml;
