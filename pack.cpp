@@ -1,7 +1,7 @@
 #pragma once
 #include "pack.h"
 
-pack::pack(TCHAR dir_out[], TCHAR dir_index[], TCHAR dir_in[])
+void pack::GoPack()
 {
     /*
     *    step1:    结构化文件索引
@@ -43,7 +43,7 @@ pack::pack(TCHAR dir_out[], TCHAR dir_index[], TCHAR dir_in[])
 * 传入文件夹完整路径及节点指针，不以斜杠结尾
 * 返回值：文件夹大小
 */
-long pack::PackFolder(LPCTSTR szFolderPath, TiXmlElement* parent_node)
+void pack::PackFolder(LPCTSTR szFolderPath, TiXmlElement* parent_node)
 {
     char* buff;
     TCHAR2UTF8(buff, szFolderPath);
@@ -153,13 +153,13 @@ long pack::PackFolder(LPCTSTR szFolderPath, TiXmlElement* parent_node)
         } while (FindNextFile(hListFile, &FindFileData));
     }
     FindClose(hListFile); // 关闭句柄;
- 
-    // 设置节点属性 保存大小len
-    char szLen[10];
+    
+    
+    // 设置节点属性 保存大小len（不过估计这大小也没人用，还是算了吧）
+    /*char szLen[10];
     sprintf_s(szLen, 10, "%d", len);
     node.SetAttribute("len", szLen);
-    parent_node->InsertEndChild(node);
- 
+    parent_node->InsertEndChild(node);*/
     // 返回该文件夹的大小
-    return len;
+    //return len;
 }
