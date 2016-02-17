@@ -1,7 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "windows.h"
-#include "tinyxml.h"
 #include "help.h"
 
 class pack
