@@ -1,11 +1,44 @@
 #pragma once
 #include "work.h"
 
+pack::pack(TCHAR dir_out[MAX_PATH], TCHAR dir_index[MAX_PATH], TCHAR dir_in[MAX_PATH])
+{
+	if(_wfopen_s(&fpOut, dir_out, _T("wb+"))==0)
+	{
+		TiXmlDocument xml;
+        	xml.Parse("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+        	// 对文件夹进行遍历并复制内容到封包文件中
+        	long size = PackFolder(dir_in, reinterpret_cast<TiXmlElement*>(&xml));
+        	fclose(fpOut);
+        	//完事，下边存索引
+        	FILE* fpIndex;//一次性搞定
+        	if (_wfopen_s(&fpIndex, dir_index, _T("wb+")) == 0)
+	        {
+	            xml.SaveFile(fpIndex);
+	            // 加密索引文件
+	            fseek(fpIndex, 0, SEEK_SET);
+	            short ch;
+	            while ((ch = fgetc(fpIndex)) != EOF)
+	            {
+	                // 逐字节取出，处理后送回
+	                fseek(fpIndex, -1, SEEK_CUR); // 指针移动回来
+	                encryption(ch); // 加密
+	                fputc(ch, fpIndex);
+	                fseek(fpIndex, 0, SEEK_CUR); // 刷新缓冲区，因为对于一个可写可读流，不能在一次读之后马上进行一次写，或者进行一次写之后马上进行一次读
+	            }
+	            fclose(fpIndex);
+	        }
+	        else
+	        {throw 1;}
+	else
+	{throw 0;}
+}
+
 /* 打包一个文件夹
 * 传入文件夹完整路径及节点指针，不以斜杠结尾
 * 返回值：文件夹大小
 */
-long work::PackFolder(LPCTSTR szFolderPath, TiXmlElement* parent_node)
+long pack::PackFolder(LPCTSTR szFolderPath, TiXmlElement* parent_node)
 {
     char* buff;
     TCHAR2UTF8(buff, szFolderPath);
@@ -100,13 +133,13 @@ long work::PackFolder(LPCTSTR szFolderPath, TiXmlElement* parent_node)
                     // len+=文件大小
                     len += filelen;
  
-                    // 显示文件处理进度（这里要改，挪回调里去）
-                    static UINT file_count = 0;
+                    // 显示文件处理进度
+                    /*static UINT file_count = 0;
                     UINT t = ++file_count;
                     t %= 10;
                     printf("\b");
                     fflush(stdout);
-                    printf("%u", t ? t : file_count);
+                    printf("%u", t ? t : file_count);*/
                 }
  
                 delete[]buff;
