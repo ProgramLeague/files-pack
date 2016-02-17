@@ -1,4 +1,4 @@
-#include "work.h"
+#include "pack.h"
 
 int _tmain(int argc, _TCHAR* argv[]) //命令行传参调用
 {
